@@ -36,6 +36,8 @@ General commands that are used a lot
 
 `# erase startup-config` - deletes contents from nvram
 
+---
+
 ## Housekeeping
 
 Basic configs for each device
