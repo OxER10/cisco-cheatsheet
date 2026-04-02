@@ -1,6 +1,10 @@
 # Cisco IOS
 
-## General:
+## General
+
+General commands and configurations for Cisco IOS devices
+
+### Common
 
 General commands that are used a lot
 
@@ -8,7 +12,7 @@ General commands that are used a lot
 
 `# conf t` - enter global config mode
 
-`(config)# int {type} {number}` - enter interface config mode 
+`(config)# int {type} {number}` - enter interface config mode
 
 `(config)# vlan {number}` - enter VLAN config mode
 
@@ -38,7 +42,7 @@ General commands that are used a lot
 
 ---
 
-## Housekeeping
+### Housekeeping
 
 Basic configs for each device
 
@@ -72,7 +76,7 @@ Basic configs for each device
 
 ---
 
-## Interfaces
+### Interfaces
 
 Usual interface commands
 
@@ -106,7 +110,7 @@ Usual interface commands
 
 ---
 
-## VLAN
+### VLAN
 
 Usual commands that are needed for vlan configuration
 
@@ -148,7 +152,9 @@ Usual commands that are needed for vlan configuration
 
 ---
 
-## DHCP:
+### DHCP
+
+Usual commands for DHCP configuration
 
 `(config)# ipv6 unicast-routing` - enables IPv6 routing
 
@@ -190,7 +196,9 @@ Usual commands that are needed for vlan configuration
 
 ---
 
-## OSPF:
+### OSPF
+
+Usual configuration commands for OSPF routing protocol
 
 `# clear ip ospf process` - clears OSPF table
 
@@ -204,7 +212,7 @@ Usual commands that are needed for vlan configuration
 
 `(config-router)# network {network-address} {wildcard-mask} area {area-id, 10 in ptp}` - enables interfaces that match to send and receive OSPF packets
 
-`(config-router)# default-information originate` - propagate default route in OSPF. Distributes it to all OSPF routers. Same as route 0.0.0.0 0.0.0.0 next-hop
+`(config-router)# default-information originate` - propagate default route in OSPF. Distributes it to all OSPF routers. Same as `route 0.0.0.0 0.0.0.0 next-hop`
 
 `(config-router)# passive-interface {type} {number}` - prevents routing updates to interfaces where they are not needed
 
@@ -223,3 +231,121 @@ Usual commands that are needed for vlan configuration
 `(config-if)# ip ospf hello-interval {sec}` - configures hello timer value (default 10)
 
 `(config-if)# ip ospf dead-interval {sec}` - configures dead timer value (default 40)
+
+---
+
+### NAT
+
+Usual configuration commands for NAT on routers
+
+`(config)# ip nat inside source static {inside local address} {inside global address}` - Configure inside static NAT
+
+`(config)# ip nat pool {pool name} {start-add} {end-add} netmask {mask}` - configure NAT pool
+
+`(config)# access-list {aclnum} permit {to be translated add} {wildmask}` - permit only to be translated addresses
+
+`(config)# ip nat inside source list {acl num | acl name} pool {nat pool name}` - bind ACL to pool
+
+`(config)# interface {type/number}` - select the interfaces participatin in translation
+
+`(config-if)# ip address {add} {mask}` - set ip address to interface
+
+`(config-if)# ip nat {inside | outside}` - add nat to inside/outside interface
+
+---
+
+## SECURITY
+
+Security commands
+
+### SSH
+
+Usual SSH configuration commands for secure remote access to devices
+
+`(config)# ip domain-name {name.com}` - sets domain name
+
+`(config)# cry key gen rsa general-keys mod 1024` - configs complexity of keys
+
+`(config)# username {name} secret {password}` - sets a username and encrypted password
+
+`(config)# ip ssh version 2` - sets SSH version to 2
+
+`(config)# line vty 0 15 (0 4)` - configs which VTY lines to use
+
+`(config-line)# login local` - sets login
+
+`(config-line)# transport input ssh` - defines transport protocol to SSH
+
+---
+
+### PORT SECURITY
+
+`(config)# interface {type and number}` - configure interface for port security
+
+`(config-if)# switchport access` - change dynamic port to manually controlled
+
+`(config-if)# switchport port-security` - enable port-security on interface
+
+`(config-if)# switchport port-security maximum {value}` - set maximum number of MAC addresses allowed on a port
+
+`(config-if)# switchport port-security mac-address {mac-address}` - allows set MAC address
+
+`(config-if)# switchport port-security mac-address sticky` - enables dynamically learning MAC addresses and sticking them on NVRAM
+
+`(config-if)# switchport port-security aging time {time}` - specify aging time for port. Range 0-1440
+
+`(config-if)# switchport port-security aging type {absolute | inactivity}` - sets age out to exactly or after inactivity
+
+`(config-if)# switchport port-security violation {protect | restrict | shutdown}` - sets how switch reacts to port violations. Shutdown disables port and port must be restarted manually
+
+---
+
+### DHCP SNOOPING
+
+Usual configuration commands for DHCP snooping to prevent rogue DHCP servers on the network
+
+`(config)# ip dhcp snooping` - enables DHCP snooping globally
+
+`(config)# ip dhcp snooping vlan {vlan number}` - enables DHCP snooping on vlan
+
+`(config)# interface {type/number}` - configure interface for DHCP snooping
+
+`(config-if)# ip dhcp snooping trust` - configures interface as trusted for DHCP messages. Untrusted interfaces will drop DHCP messages that are not from a trusted source
+
+---
+
+### ACL
+
+Usual configuration commands for ACLs to control traffic on the network
+
+`(config)# access-list {acl-number} {deny | permit} {source} [wildcard-mask]` - creates ACL with number
+
+`(config)# access-list {acl-number} remark {text}` - add remark to ACL. Documentation purposes.
+
+`(config)# interface {type number}` - configure interface to apply ACL
+
+`(config-if)# ip access-group {acl-number | acl-name} {in | out}` - apply ACL to interface
+
+`(config)# ip access-list {type} {name}` - enter access list config mode with name
+
+`(config-std-nacl)# remark {text}` - for documentation purposes
+
+`(config-std-nacl)# permit host {ip-address}` - permits host ip
+
+`(config-std-nacl)# permit {ip-address} {wildcard-mask}`  - permits all hosts on wildcard
+
+`(config-std-nacl)# deny any` - track number of times denied
+
+`(config)# line vty 0 15 (0 4)` - configure VTY lines to apply ACL
+
+`(config-line)# access-class {acl-number | acl-name} {in | out}` - apply ACL to VTY lines
+
+---
+
+### Extended ACL
+
+usual configuration commands for extended ACLs to control traffic on the network with more options
+
+`(config)# access-list {acl-number (100-199, 2000-2699)} {deny | permit} {protocol (ip | tcp | udp | icmp} {source} {wildcard-mask} [lt | gt | eq | neq {port}]` - creates extended ACL with number
+
+`(config)# ip access-list extended {name}` - enter access list config mode with name
