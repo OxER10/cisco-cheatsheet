@@ -72,7 +72,7 @@ Basic configs for each device
 
 ---
 
-# Interfaces
+## Interfaces
 
 Usual interface commands
 
@@ -146,3 +146,80 @@ Usual commands that are needed for vlan configuration
 
 `(conf-if)# no shut` - enables interface
 
+---
+
+## DHCP:
+
+`(config)# ipv6 unicast-routing` - enables IPv6 routing
+
+`(config)# no service dhcp` - disables DHCP services
+
+`(config)# service dhcp` - enables DHCP services
+
+`(config)# ip dhcp excluded-address {low-address} [high-address]` - exclude ip pool
+
+`(config)# ip | ipv6 dhcp pool {pool-name}` - creates pool and puts router in config mode
+
+`(dhcp-config)# network {network-number} [mask | /prefix-length]` - define address pool
+
+`(dhcp-config)# default-router {address} [address2, addressx]` - define default router or gateway
+
+`(dhcp-config)# dns-server {address} [address2, addressx]` - define dns server
+
+`(dhcp-config)# domain-name {domain}` - define domain name
+
+`(dhcp-config)# lease {days [hours [minutes]] | infinite}` - define duration of the DHCP release
+
+`(dhcp-config)# netbios-name-server {address} [address2, addressx]` - define NetBIOS WINS server
+
+`(config)# interface {type and number}` - dhcp interface
+
+`(config-if)# ip address dhcp` - configures interface as a DHCP client
+
+`(config-if)# ip helper-address {server-address}` - relays received DHCP broadcasts to the DHCPv4 server
+
+`(config-if)# ipv6 enable` - creates link-local address without GUA
+
+`(config-if)# ipv6 address autoconfig` - enables automatic configuration of IPv6 addressing usin SLAAC
+
+`(config-if)# ipv6 nd other-config-flag` - reset the interface to default SLAAC only option (O flag = 0), thus forcefully enabling stateless DHCPv6
+
+`(config-if)# ipv6 nd managed-config-flag` - enables stateful DHCPv6 on interface. Sets M flag to 1
+
+`(config-if)# ipv6 nd prefix default no-autoconfig` - disables SLAAC by setting A flag to 0
+
+---
+
+## OSPF:
+
+`# clear ip ospf process` - clears OSPF table
+
+`(config)# interface Loopback {num}` - configure loopback interface
+
+`(config)# ip address {ip-address} {subnet-mask}` - uses loopback ip as router ID
+
+`(config)# router ospf {process-id}` - enables OSPF on router
+
+`(config-router)# router-id {rid}` - sets router ID manually
+
+`(config-router)# network {network-address} {wildcard-mask} area {area-id, 10 in ptp}` - enables interfaces that match to send and receive OSPF packets
+
+`(config-router)# default-information originate` - propagate default route in OSPF. Distributes it to all OSPF routers. Same as route 0.0.0.0 0.0.0.0 next-hop
+
+`(config-router)# passive-interface {type} {number}` - prevents routing updates to interfaces where they are not needed
+
+`(config-router)# auto-cost reference-bandwidth {mbits}` - change reference cost
+
+`(config)# interface {type/number}` - configure ospf interface
+
+`(config-if)# ip ospf {process-id} area {area-id, 10 in ptp}` - configure OSPF directly on interface
+
+`(config-if)# ip ospf network point-to-point` - changes to point to point network
+
+`(config-if)# ip ospf priority {num}` - configures interface priority
+
+`(config-if)# ip ospf cost {num}` - configures cost value of interface
+
+`(config-if)# ip ospf hello-interval {sec}` - configures hello timer value (default 10)
+
+`(config-if)# ip ospf dead-interval {sec}` - configures dead timer value (default 40)
