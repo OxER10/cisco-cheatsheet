@@ -30,6 +30,12 @@ General commands that are used a lot
 
 `# clock set {time} {date}` - sets manual time/date
 
+`(config)# ntp master {stratum}` - sets device as NTP master with stratum level
+
+`(config)# ntp server {ip-address}` - sets NTP server to sync time with
+
+`config)# ntp update-calendar` - updates calendar on device with current time
+
 `# terminal history size {number}` - increase or decrase the size of the buffer
 
 `exit` - exits current mode/level
@@ -39,6 +45,28 @@ General commands that are used a lot
 `# delete vlan.dat` - deletes the file containing all vlans
 
 `# erase startup-config` - deletes contents from nvram
+
+---
+
+### Saving and managing configs
+
+`# copy running-config startup-config` - copies running config to startup config (nvram)
+
+`# copy running-config flash:` - copies running config to flash memory
+
+`# copy flash: {filename} running-config` - copies config from flash to running config
+
+`# copy running-config tftp:` - copies running config to tftp server
+
+`# copy tftp: running-config` - copies config from tftp server to running config
+
+---
+
+### Upgrading IOS
+
+`# copy tftp: flash:` - copies IOS image from tftp server to flash memory
+
+`# boot system {filename}` - sets device to boot from specific IOS image in flash memory
 
 ---
 
@@ -251,6 +279,50 @@ Usual configuration commands for NAT on routers
 `(config-if)# ip address {add} {mask}` - set ip address to interface
 
 `(config-if)# ip nat {inside | outside}` - add nat to inside/outside interface
+
+`(config)# ip nat inside source list {acl num | acl name} interface {type/number} overload` - configure dynamic NAT overload (PAT) to use interface ip as inside global address
+
+`Config)# ip nat inside source list {acl num | acl name} pool {nat pool name} overload` - configure dynamic NAT overload (PAT) using pool addresses as inside global addresses
+
+---
+
+### Device Discovery
+
+Usual configuration commands for CDP and LLDP to discover directly connected devices
+
+`(config)# cdp run` - enables CDP globally
+
+`(config)# no cdp run` - disables CDP globally
+
+`(config)# interface {type/number}` - configure interface for CDP
+
+`(config-if)# cdp enable` - enables CDP on interface
+
+`(config-if)# cdp disable` - disables CDP on interface
+
+`(config)# lldp run` - enables LLDP globally
+
+`(config)# no lldp run` - disables LLDP globally
+
+`(config)# interface {type/number}` - configure interface for LLDP
+
+`(config-if)# lldp transmit` - enables LLDP transmission on interface
+
+`(config-if)# lldp receive` - enables LLDP reception on interface
+
+`(config-if)# no lldp transmit` - disables LLDP transmission on interface
+
+`(config-if)# no lldp receive` - disables LLDP reception on interface
+
+---
+
+### NTP
+
+Usual configuration commands for NTP to synchronize time on devices
+
+`(config)# ntp master {stratum}` - sets device as NTP master with stratum level
+
+`(config)# ntp server {ip-address}` - sets NTP server to sync time with
 
 ---
 
